@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Custom Skateboard Shape</title>
+</head>
+<body>
+
+<!-- Intro / Instructions -->
+<p>
+  <strong>Step 1:</strong> Design your custom board shape using the editor below.  
+  <br />
+  The canvas represents the 34x10 uncut blank that your board will be shaped from.  
+  <br />
+  <em>*If the board shape doesn't load, try refreshing or another browser—this tool is a work in progress.</em>
+</p>
+
+<!-- Single Canvas for All Devices -->
+<canvas id="boardCanvas"></canvas>
+
+<!-- Tab Buttons (Only visible on small screens via CSS;
+     for large screens, you'll show 3 columns side by side) -->
+<div class="tab-buttons">
+  <button class="tab-button active" data-tab="bodyPanel">Body</button>
+  <button class="tab-button" data-tab="nosePanel">Nose</button>
+  <button class="tab-button" data-tab="tailPanel">Tail</button>
+</div>
+
+<!-- BODY Panel -->
+<div id="bodyPanel" class="panel active">
+  <fieldset>
+    <legend><strong>Body</strong></legend>
+
+    <div class="slider-group">
+      <label for="bodyWidthNose">
+        Front Truck Width (inches): <span id="widthNoseValue">08.50</span>
+      </label>
+      <input
+        type="range"
+        id="bodyWidthNose"
+        value="8.5"
+        min="1"
+        max="10"
+        step="0.125"
+        oninput="updateBoardShape()"
+      />
+    </div>
+
+    <div class="slider-group">
+      <label for="bodyWidthTail">
+        Back Truck Width (inches): <span id="widthTailValue">08.50</span>
+      </label>
+      <input
+        type="range"
+        id="bodyWidthTail"
+        value="8.5"
+        min="1"
+        max="10"
+        step="0.125"
+        oninput="updateBoardShape()"
+      />
+    </div>
+
+    <div class="slider-group">
+      <label for="bodyCurvature">
+        Curve: <span id="bodyCurvatureValue">45</span>
+      </label>
+      <input
+        type="range"
+        id="bodyCurvature"
+        value="45"
+        min="-50"
+        max="50"
+        step="1"
+        oninput="updateBoardShape()"
+      />
+    </div>
+
+    <div class="slider-group">
+      <label for="bodyControlPointPosition">
+        Curve Peak: <span id="bodyControlPointPositionValue">0.50</span>
+      </label>
+      <input
+        type="range"
+        id="bodyControlPointPosition"
+        value="0.5"
+        min="0"
+        max="1"
+        step="0.01"
+        oninput="updateBoardShape()"
+      />
+    </div>
+
+    <strong>
+      Total Board Length: <span id="totalBoardLengthValue">22.00</span> inches
+    </strong>
+  </fieldset>
+</div>
+
+<!-- NOSE Panel -->
+<div id="nosePanel" class="panel">
+  <fieldset>
+    <legend><strong>Nose</strong></legend>
+
+    <div class="slider-group">
+      <label for="noseLength">
+        Length (inches): <span id="noseLengthValue">05.50</span>
+      </label>
+      <input
+        type="range"
+        id="noseLength"
+        value="5.5"
+        min="3"
+        max="6"
+        step="0.125"
+        oninput="updateBoardShape()"
+      />
+    </div>
+
+    <div class="slider-group">
+      <label for="noseWidth">
+        Width (inches): <span id="noseWidthValue">00.00</span>
+      </label>
+      <input
+        type="range"
+        id="noseWidth"
+        value="0"
+        min="0"
+        max="10"
+        step="0.125"
+        oninput="updateBoardShape()"
+      />
+    </div>
+
+    <div class="slider-group">
+      <label for="noseCurvature">
+        Curve: <span id="noseCurvatureValue">40</span>
+      </label>
+      <input
+        type="range"
+        id="noseCurvature"
+        value="40"
+        min="0"
+        max="50"
+        step="1"
+        oninput="updateBoardShape()"
+      />
+    </div>
+
+    <div class="slider-group">
+      <label for="noseControlPointPosition">
+        Curve Peak: <span id="noseControlPointPositionValue">0.96</span>
+      </label>
+      <input
+        type="range"
+        id="noseControlPointPosition"
+        value="0.96"
+        min="0"
+        max="1"
+        step="0.01"
+        oninput="updateBoardShape()"
+      />
+    </div>
+  </fieldset>
+</div>
+
+<!-- TAIL Panel -->
+<div id="tailPanel" class="panel">
+  <fieldset>
+    <legend><strong>Tail</strong></legend>
+
+    <div class="slider-group">
+      <label for="tailLength">
+        Length (inches): <span id="tailLengthValue">05.50</span>
+      </label>
+      <input
+        type="range"
+        id="tailLength"
+        value="5.5"
+        min="3"
+        max="6"
+        step="0.125"
+        oninput="updateBoardShape()"
+      />
+    </div>
+
+    <div class="slider-group">
+      <label for="tailWidth">
+        Width (inches): <span id="tailWidthValue">00.00</span>
+      </label>
+      <input
+        type="range"
+        id="tailWidth"
+        value="0"
+        min="0"
+        max="10"
+        step="0.125"
+        oninput="updateBoardShape()"
+      />
+    </div>
+
+    <div class="slider-group">
+      <label for="tailCurvature">
+        Curve: <span id="tailCurvatureValue">40</span>
+      </label>
+      <input
+        type="range"
+        id="tailCurvature"
+        value="40"
+        min="0"
+        max="50"
+        step="1"
+        oninput="updateBoardShape()"
+      />
+    </div>
+
+    <div class="slider-group">
+      <label for="tailControlPointPosition">
+        Curve Peak: <span id="tailControlPointPositionValue">0.96</span>
+      </label>
+      <input
+        type="range"
+        id="tailControlPointPosition"
+        value="0.96"
+        min="0"
+        max="1"
+        step="0.01"
+        oninput="updateBoardShape()"
+      />
+    </div>
+  </fieldset>
+</div>
+
+<!-- Comment box and Action Buttons -->
+<div class="comment-and-buttons">
+  <div class="comment-box">
+    <label for="userComment">Add a Comment:</label><br />
+    <textarea
+      id="userComment"
+      rows="4"
+      cols="50"
+      placeholder="Type your comment here..."
+    ></textarea>
+  </div>
+
+  <div class="button-container">
+    <button onclick="clearCanvas()">Clear Canvas</button>
+    <button onclick="resetToDefault()">Reset to Default Shape</button>
+    <button onclick="saveAsPNG()">Save Design</button>
+  </div>
+</div>
+
+<p>
+  <strong>Step 3:</strong> Click ‘Save’ to download the PNG file to your device.  
+  <br />
+  <em>*If saving on mobile causes words to overlap, don't worry—I’ll still see what you designed!</em>
+</p>
+
+<!-- Fabric.js (Must load before your custom script) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/521/fabric.min.js"></script>
+
+<!-- Your JavaScript (the "updateBoardShape", "saveAsPNG", etc. logic) -->
+<script>
+
+
+var canvas;        // The single Fabric.js canvas
+var body, nose, tail;  // Our Path objects for the board shape
+var noseArea, tailArea; // Optional colored zones for nose/tail reference
+var centerX, centerY;
+var pixelsPerInch = 30;
+
+/**
+ * Called once the window loads.
+ * Initializes the canvas, sets up sizing,
+ * draws lines/zones, and updates the shape.
+ */
+window.onload = function() {
+  // Create our single canvas
+  canvas = new fabric.Canvas('boardCanvas');
+  
+  // Adjust size to fit screen width (responsive)
+  adjustCanvasSize();
+  canvas.setBackgroundColor('#f0f0f0', canvas.renderAll.bind(canvas));
+
+  // Calculate center
+  centerX = canvas.getWidth() / 2;
+  centerY = canvas.getHeight() / 2;
+
+  // Optional: Draw center lines & nose/tail zones
+  drawDefaultLinesAndZones();
+
+  // Update shape with default slider values
+  updateBoardShape();
+
+  // Re-adjust & redraw on window resize
+  window.addEventListener('resize', function() {
+    adjustCanvasSize();
+    updateBoardShape();
+  });
+
+  // (Optional) Prevent scrolling when touching sliders on mobile
+  preventScrollOnSliders();
+};
+
+
+/**
+ * Dynamically sizes the canvas based on current window width.
+ */
+function adjustCanvasSize() {
+  // For a 34" wide x 10" high blank:
+  // Try to fill most of the window width, minus some padding
+  var totalInchesWide = 34;
+  var availableWidth = window.innerWidth - 40; 
+  pixelsPerInch = availableWidth / totalInchesWide;
+
+  var canvasWidth = pixelsPerInch * 34; // 34" wide
+  var canvasHeight = pixelsPerInch * 10; // 10" high
+
+  canvas.setWidth(canvasWidth);
+  canvas.setHeight(canvasHeight);
+
+  centerX = canvasWidth / 2;
+  centerY = canvasHeight / 2;
+}
+
+
+/**
+ * Draws optional reference lines:
+ * - A vertical & horizontal center line
+ * - Nose & tail bounding rectangles (6" wide areas)
+ */
+function drawDefaultLinesAndZones() {
+  // Vertical center line
+  var verticalLine = new fabric.Line([centerX, 0, centerX, canvas.getHeight()], {
+    stroke: 'green',
+    strokeWidth: 1,
+    selectable: false,
+    opacity: 0.5
+  });
+  canvas.add(verticalLine);
+
+  // Horizontal center line
+  var horizontalLine = new fabric.Line([0, centerY, canvas.getWidth(), centerY], {
+    stroke: 'green',
+    strokeWidth: 1,
+    selectable: false,
+    opacity: 0.5
+  });
+  canvas.add(horizontalLine);
+
+  // Nose area (front 6 inches)
+  noseArea = new fabric.Rect({
+    left: 0,
+    top: 0,
+    width: inchesToPixels(6),
+    height: canvas.getHeight(),
+    fill: 'rgba(255, 0, 0, 0.2)',
+    selectable: false
+  });
+  canvas.add(noseArea);
+
+  // Tail area (back 6 inches)
+  tailArea = new fabric.Rect({
+    left: canvas.getWidth() - inchesToPixels(6),
+    top: 0,
+    width: inchesToPixels(6),
+    height: canvas.getHeight(),
+    fill: 'rgba(0, 0, 255, 0.2)',
+    selectable: false
+  });
+  canvas.add(tailArea);
+
+  canvas.renderAll();
+}
+
+
+/**
+ * Converts inches to pixels based on current scaling.
+ */
+function inchesToPixels(inches) {
+  return inches * pixelsPerInch;
+}
+
+/**
+ * A helper to format numbers to 2 decimal places and
+ * pad them if needed (e.g., 8.50).
+ */
+function formatTwoDecimalPlaces(value) {
+  return value.toFixed(2);
+}
+
+
+/**
+ * Reads all the slider values, draws the shape in 3 segments:
+ * - Nose (front)  (0 to 6 inches)
+ * - Body (middle) (6 inches to canvas.width - 6 inches)
+ * - Tail (back)   (last 6 inches)
+ */
+function updateBoardShape() {
+  // If these exist, remove them first
+  if (body) canvas.remove(body);
+  if (nose) canvas.remove(nose);
+  if (tail) canvas.remove(tail);
+
+  // Grab slider values
+  var widthNose = parseFloat(document.getElementById('bodyWidthNose').value);
+  var widthTail = parseFloat(document.getElementById('bodyWidthTail').value);
+
+  var noseLength = parseFloat(document.getElementById('noseLength').value);
+  var tailLength = parseFloat(document.getElementById('tailLength').value);
+
+  var noseWidth = parseFloat(document.getElementById('noseWidth').value);
+  var noseCurvature = parseFloat(document.getElementById('noseCurvature').value);
+  var noseCtrlPos = parseFloat(document.getElementById('noseControlPointPosition').value);
+
+  var tailWidth = parseFloat(document.getElementById('tailWidth').value);
+  var tailCurvature = parseFloat(document.getElementById('tailCurvature').value);
+  var tailCtrlPos = parseFloat(document.getElementById('tailControlPointPosition').value);
+
+  var bodyCurvature = parseFloat(document.getElementById('bodyCurvature').value);
+  var bodyCtrlPos = parseFloat(document.getElementById('bodyControlPointPosition').value);
+
+  // Update display text
+  document.getElementById('widthNoseValue').innerText = formatTwoDecimalPlaces(widthNose);
+  document.getElementById('widthTailValue').innerText = formatTwoDecimalPlaces(widthTail);
+  document.getElementById('noseLengthValue').innerText = formatTwoDecimalPlaces(noseLength);
+  document.getElementById('tailLengthValue').innerText = formatTwoDecimalPlaces(tailLength);
+  document.getElementById('noseWidthValue').innerText = formatTwoDecimalPlaces(noseWidth);
+  document.getElementById('tailWidthValue').innerText = formatTwoDecimalPlaces(tailWidth);
+  document.getElementById('noseCurvatureValue').innerText = noseCurvature;
+  document.getElementById('tailCurvatureValue').innerText = tailCurvature;
+  document.getElementById('bodyCurvatureValue').innerText = bodyCurvature;
+  document.getElementById('bodyControlPointPositionValue').innerText = formatTwoDecimalPlaces(bodyCtrlPos);
+  document.getElementById('noseControlPointPositionValue').innerText = formatTwoDecimalPlaces(noseCtrlPos);
+  document.getElementById('tailControlPointPositionValue').innerText = formatTwoDecimalPlaces(tailCtrlPos);
+
+  var totalBoardLength = noseLength + tailLength + 22; // 22" is the base 'body' length
+  document.getElementById('totalBoardLengthValue').innerText = formatTwoDecimalPlaces(totalBoardLength);
+
+  // The 'bodyLength' is the horizontal distance for the middle
+  var bodyLengthPx = canvas.getWidth() - inchesToPixels(12);
+
+  // Calculate control points for nose, tail, body
+  // We'll build each segment as a separate Path.
+
+  // N O S E
+  var noseCtrlX = inchesToPixels(6) - inchesToPixels(noseLength * noseCtrlPos);
+  var noseTopCtrlY = centerY - (noseCurvature / 50) * (canvas.getHeight() / 2);
+  var noseBotCtrlY = centerY + (noseCurvature / 50) * (canvas.getHeight() / 2);
+
+  nose = new fabric.Path(`
+    M ${inchesToPixels(6)} ${centerY - inchesToPixels(widthNose / 2)}
+    Q ${noseCtrlX} ${noseTopCtrlY},
+      ${inchesToPixels(6) - inchesToPixels(noseLength)} ${centerY - inchesToPixels(noseWidth / 2)}
+    L ${inchesToPixels(6) - inchesToPixels(noseLength)} ${centerY + inchesToPixels(noseWidth / 2)}
+    Q ${noseCtrlX} ${noseBotCtrlY},
+      ${inchesToPixels(6)} ${centerY + inchesToPixels(widthNose / 2)}
+  `, {
+    fill: 'transparent',
+    stroke: 'black',
+    selectable: false
+  });
+
+  // B O D Y
+  var bodyCtrlX = (centerX - (bodyLengthPx / 2)) + (bodyCtrlPos * bodyLengthPx);
+  var bodyTopCtrlY = centerY - (bodyCurvature / 50) * (canvas.getHeight() / 2);
+  var bodyBotCtrlY = centerY + (bodyCurvature / 50) * (canvas.getHeight() / 2);
+
+  body = new fabric.Path(`
+    M ${inchesToPixels(6)} ${centerY - inchesToPixels(widthNose / 2)}
+    Q ${bodyCtrlX} ${bodyTopCtrlY},
+      ${canvas.getWidth() - inchesToPixels(6)} ${centerY - inchesToPixels(widthTail / 2)}
+    L ${canvas.getWidth() - inchesToPixels(6)} ${centerY + inchesToPixels(widthTail / 2)}
+    Q ${bodyCtrlX} ${bodyBotCtrlY},
+      ${inchesToPixels(6)} ${centerY + inchesToPixels(widthNose / 2)}
+  `, {
+    fill: 'transparent',
+    stroke: 'black',
+    selectable: false
+  });
+
+  // T A I L
+  var tailCtrlX = (canvas.getWidth() - inchesToPixels(6)) + inchesToPixels(tailLength * tailCtrlPos);
+  var tailTopCtrlY = centerY - (tailCurvature / 50) * (canvas.getHeight() / 2);
+  var tailBotCtrlY = centerY + (tailCurvature / 50) * (canvas.getHeight() / 2);
+
+  tail = new fabric.Path(`
+    M ${canvas.getWidth() - inchesToPixels(6)} ${centerY - inchesToPixels(widthTail / 2)}
+    Q ${tailCtrlX} ${tailTopCtrlY},
+      ${canvas.getWidth() - inchesToPixels(6) + inchesToPixels(tailLength)} ${centerY - inchesToPixels(tailWidth / 2)}
+    L ${canvas.getWidth() - inchesToPixels(6) + inchesToPixels(tailLength)} ${centerY + inchesToPixels(tailWidth / 2)}
+    Q ${tailCtrlX} ${tailBotCtrlY},
+      ${canvas.getWidth() - inchesToPixels(6)} ${centerY + inchesToPixels(widthTail / 2)}
+  `, {
+    fill: 'transparent',
+    stroke: 'black',
+    selectable: false
+  });
+
+  // Add them in order
+  canvas.add(body);
+  canvas.add(nose);
+  canvas.add(tail);
+  canvas.renderAll();
+}
+
+
+/**
+ * Clears the canvas (removes all shapes),
+ * then re-draws the default reference lines.
+ */
+function clearCanvas() {
+  canvas.clear();
+  canvas.setBackgroundColor('#f0f0f0', canvas.renderAll.bind(canvas));
+  drawDefaultLinesAndZones();
+}
+
+
+/**
+ * Resets all sliders to default values, then updates shape.
+ */
+function resetToDefault() {
+  document.getElementById('bodyWidthNose').value = 8.5;
+  document.getElementById('bodyWidthTail').value = 8.5;
+  document.getElementById('bodyCurvature').value = 45;
+  document.getElementById('bodyControlPointPosition').value = 0.5;
+
+  document.getElementById('noseLength').value = 5.5;
+  document.getElementById('noseWidth').value = 0;
+  document.getElementById('noseCurvature').value = 40;
+  document.getElementById('noseControlPointPosition').value = 0.96;
+
+  document.getElementById('tailLength').value = 5.5;
+  document.getElementById('tailWidth').value = 0;
+  document.getElementById('tailCurvature').value = 40;
+  document.getElementById('tailControlPointPosition').value = 0.96;
+
+  updateBoardShape();
+}
+
+
+/**
+ * Optional helper to increment/decrement a slider
+ * if you want arrow buttons. (Not strictly required,
+ * but included if you used it before.)
+ */
+function incrementSlider(sliderId, amount) {
+  var slider = document.getElementById(sliderId);
+  slider.value = parseFloat(slider.value) + amount;
+  slider.dispatchEvent(new Event('input'));
+}
+
+
+/**
+ * Saves the canvas as a PNG file (with increased multiplier
+ * for higher resolution). Also appends text for comment & measurements.
+ */
+function saveAsPNG() {
+  var filename = prompt("Enter a name for your file:", "custom-skateboard");
+  if (!filename) return; 
+  if (!filename.endsWith(".png")) filename += ".png";
+
+  // We'll temporarily add text to the canvas (measurements, comment).
+  var originalHeight = canvas.getHeight();
+  // Expand the canvas so there's room for text at the bottom
+  canvas.setHeight(canvas.getHeight() + 100);
+
+  // Gather current slider values for the text if you want:
+  // (Here, we’ll just show a quick example with user comment)
+  var comment = document.getElementById('userComment').value;
+  var commentObj = null;
+  if (comment) {
+    commentObj = new fabric.Textbox("Comment: " + comment, {
+      left: 20,
+      top: originalHeight + 10,
+      fontSize: 12,
+      fill: 'black',
+      width: canvas.getWidth() - 40,
+      textAlign: 'left'
+    });
+    canvas.add(commentObj);
+  }
+
+  // Re-render
+  canvas.renderAll();
+
+  // Export with a multiplier for higher DPI
+  var dataURL = canvas.toDataURL({
+    format: 'png',
+    multiplier: 3
+  });
+
+  // Clean up by removing the text, revert height
+  if (commentObj) {
+    canvas.remove(commentObj);
+  }
+  canvas.setHeight(originalHeight);
+  canvas.renderAll();
+
+  // Download
+  var link = document.createElement('a');
+  link.href = dataURL;
+  link.download = filename;
+  link.click();
+}
+
+
+/**
+ * Prevents the page from scrolling on mobile devices when
+ * the user touches/moves a slider.
+ */
+function preventScrollOnSliders() {
+  var sliders = document.querySelectorAll('input[type="range"]');
+  sliders.forEach(function(slider) {
+    slider.addEventListener("touchstart", function(e) {
+      e.stopPropagation();
+    }, { passive: true });
+    slider.addEventListener("touchmove", function(e) {
+      e.stopPropagation();
+    }, { passive: true });
+  });
+}
+
+</script>
+
+</body>
+</html>
