@@ -1,0 +1,1376 @@
+<body>Step 1:Design your custom board shape using the editor below. The canvas represents the 34x10 uncut blank that your board will be shaped from. Play with the sliders and you'll get  the hang of it! 
+<br>
+<br>*If the board shape doesn't load just try refreshing, deleting cookies, or a different browser, this tool is a work in progress<body/>
+<!-- BEGIN SKATEBOARD CUSTOMIZER SINGLE-SNIPPET -->
+
+<!-- Fabric.js (remove if already loaded in your theme) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/521/fabric.min.js"></script>
+
+<!-- Desktop Layout -->
+<div class="desktop-layout">
+  <div id="resizableContainer">
+    <div id="canvasContainer">
+      <canvas id="boardCanvas"></canvas>
+    </div>
+
+    <div id="slidersContainer">
+      <div class="slider-column">
+        <fieldset>
+          <legend><strong>Body</strong></legend>
+
+          <div class="slider-group">
+            <label for="bodyWidthNose">
+              Front Truck Width (inches): <span id="widthNoseValue">08.50</span>
+              <!-- Tooltip icon -->
+              <span 
+                class="info-icon" 
+                tabindex="0" 
+                data-tooltip="Adjusts how wide the board is near the front truck."
+              ></span>
+            </label>
+            <button class="arrow-button" onclick="incrementSlider('bodyWidthNose', -0.125)">&#9664;</button>
+            <input type="range" id="bodyWidthNose" value="8.5" min="1" max="10" step="0.125" oninput="updateBoardShape()" class="styled-slider" />
+            <button class="arrow-button" onclick="incrementSlider('bodyWidthNose', 0.125)">&#9654;</button>
+          </div>
+
+          <div class="slider-group">
+            <label for="bodyWidthTail">
+              Back Truck Width (inches): <span id="widthTailValue">08.50</span>
+              <span 
+                class="info-icon" 
+                tabindex="0" 
+                data-tooltip="Adjusts how wide the board is near the back truck."
+              ></span>
+            </label>
+            <button class="arrow-button" onclick="incrementSlider('bodyWidthTail', -0.125)">&#9664;</button>
+            <input type="range" id="bodyWidthTail" value="8.5" min="1" max="10" step="0.125" oninput="updateBoardShape()" class="styled-slider" />
+            <button class="arrow-button" onclick="incrementSlider('bodyWidthTail', 0.125)">&#9654;</button>
+          </div>
+
+          <div class="slider-group">
+            <label for="bodyCurvature">
+              Curve: <span id="bodyCurvatureValue">45</span>
+              <span
+                class="info-icon"
+                tabindex="0"
+                data-tooltip="Curve of the body, to make it egg shaped or move concave."
+              ></span>
+            </label>
+            <button class="arrow-button" onclick="incrementSlider('bodyCurvature', -1)">&#9664;</button>
+            <input type="range" id="bodyCurvature" value="45" min="-50" max="50" step="1" oninput="updateBoardShape()" class="styled-slider" />
+            <button class="arrow-button" onclick="incrementSlider('bodyCurvature', 1)">&#9654;</button>
+          </div>
+
+          <div class="slider-group">
+            <label for="bodyControlPointPosition">
+              Curve Peak: <span id="bodyControlPointPositionValue">0.50</span>
+              <span
+                class="info-icon"
+                tabindex="0"
+                data-tooltip="Adjust where the peak of the curve is."
+              ></span>
+            </label>
+            <button class="arrow-button" onclick="incrementSlider('bodyControlPointPosition', -0.01)">&#9664;</button>
+            <input type="range" id="bodyControlPointPosition" value="0.5" min="0" max="1" step="0.01" oninput="updateBoardShape()" class="styled-slider" />
+            <button class="arrow-button" onclick="incrementSlider('bodyControlPointPosition', 0.01)">&#9654;</button>
+          </div>
+
+          <strong>Total Board Length: <span id="totalBoardLengthValue">22.00</span> inches</strong>
+        </fieldset>
+      </div>
+      
+      <!-- SECOND COLUMN: Nose -->
+      <div class="slider-column">
+        <fieldset>
+          <legend><strong>Nose</strong></legend>
+
+          <div class="slider-group">
+            <label for="noseLength">
+              Length (inches): <span id="noseLengthValue">05.50</span>
+              <span 
+                class="info-icon" 
+                tabindex="0" 
+                data-tooltip="How far the nose extends from the body."
+              ></span>
+            </label>
+            <button class="arrow-button" onclick="incrementSlider('noseLength', -0.125)">&#9664;</button>
+            <input type="range" id="noseLength" value="5.5" min="3" max="6" step="0.125" oninput="updateBoardShape()" class="styled-slider" />
+            <button class="arrow-button" onclick="incrementSlider('noseLength', 0.125)">&#9654;</button>
+          </div>
+
+          <div class="slider-group">
+            <label for="noseWidth">
+              Width (inches): <span id="noseWidthValue">00.00</span>
+              <span
+                class="info-icon"
+                tabindex="0"
+                data-tooltip="The width of the very end of the nose, to make it more flat."
+              ></span>
+            </label>
+            <button class="arrow-button" onclick="incrementSlider('noseWidth', -0.125)">&#9664;</button>
+            <input type="range" id="noseWidth" value="0" min="0" max="10" step="0.125" oninput="updateBoardShape()" class="styled-slider" />
+            <button class="arrow-button" onclick="incrementSlider('noseWidth', 0.125)">&#9654;</button>
+          </div>
+
+          <div class="slider-group">
+            <label for="noseCurvature">
+              Curve: <span id="noseCurvatureValue">40</span>
+              <span
+                class="info-icon"
+                tabindex="0"
+                data-tooltip="The curve and roundess of the nose."
+              ></span>
+            </label>
+            <button class="arrow-button" onclick="incrementSlider('noseCurvature', -1)">&#9664;</button>
+            <input type="range" id="noseCurvature" value="40" min="0" max="50" step="1" oninput="updateBoardShape()" class="styled-slider" />
+            <button class="arrow-button" onclick="incrementSlider('noseCurvature', 1)">&#9654;</button>
+          </div>
+
+          <div class="slider-group">
+            <label for="noseControlPointPosition">
+              Curve Peak: <span id="noseControlPointPositionValue">0.96</span>
+              <span
+                class="info-icon"
+                tabindex="0"
+                data-tooltip="The peak of the curve to shape the nose how you want."
+              ></span>
+            </label>
+            <button class="arrow-button" onclick="incrementSlider('noseControlPointPosition', -0.01)">&#9664;</button>
+            <input type="range" id="noseControlPointPosition" value="0.96" min="0" max="1" step="0.01" oninput="updateBoardShape()" class="styled-slider" />
+            <button class="arrow-button" onclick="incrementSlider('noseControlPointPosition', 0.01)">&#9654;</button>
+          </div>
+        </fieldset>
+      </div>
+
+      <!-- THIRD COLUMN: Tail -->
+      <div class="slider-column">
+        <fieldset>
+          <legend><strong>Tail</strong></legend>
+
+          <div class="slider-group">
+            <label for="tailLength">
+              Length (inches): <span id="tailLengthValue">05.50</span>
+              <span
+                class="info-icon"
+                tabindex="0"
+                data-tooltip="Length of the tail from the body."
+              ></span>
+            </label>
+            <button class="arrow-button" onclick="incrementSlider('tailLength', -0.125)">&#9664;</button>
+            <input type="range" id="tailLength" value="5.5" min="3" max="6" step="0.125" oninput="updateBoardShape()" class="styled-slider" />
+            <button class="arrow-button" onclick="incrementSlider('tailLength', 0.125)">&#9654;</button>
+          </div>
+
+          <div class="slider-group">
+            <label for="tailWidth">
+              Width (inches): <span id="tailWidthValue">00.00</span>
+              <span
+                class="info-icon"
+                tabindex="0"
+                data-tooltip="Width of the end ofthe tail to make it more flat, or rounded."
+              ></span>
+            </label>
+            <button class="arrow-button" onclick="incrementSlider('tailWidth', -0.125)">&#9664;</button>
+            <input type="range" id="tailWidth" value="0" min="0" max="10" step="0.125" oninput="updateBoardShape()" class="styled-slider" />
+            <button class="arrow-button" onclick="incrementSlider('tailWidth', 0.125)">&#9654;</button>
+          </div>
+
+          <div class="slider-group">
+            <label for="tailCurvature">
+              Curve: <span id="tailCurvatureValue">40</span>
+              <span
+                class="info-icon"
+                tabindex="0"
+                data-tooltip="The curve and roundness of the tail"
+              ></span>
+            </label>
+            <button class="arrow-button" onclick="incrementSlider('tailCurvature', -1)">&#9664;</button>
+            <input type="range" id="tailCurvature" value="40" min="0" max="50" step="1" oninput="updateBoardShape()" class="styled-slider" />
+            <button class="arrow-button" onclick="incrementSlider('tailCurvature', 1)">&#9654;</button>
+          </div>
+
+          <div class="slider-group">
+            <label for="tailControlPointPosition">
+              Curve Peak: <span id="tailControlPointPositionValue">0.96</span>
+              <span
+                class="info-icon"
+                tabindex="0"
+                data-tooltip="The peak of the curve to shape the tail how you want."
+              ></span>
+            </label>
+            <button class="arrow-button" onclick="incrementSlider('tailControlPointPosition', -0.01)">&#9664;</button>
+            <input type="range" id="tailControlPointPosition" value="0.96" min="0" max="1" step="0.01" oninput="updateBoardShape()" class="styled-slider" />
+            <button class="arrow-button" onclick="incrementSlider('tailControlPointPosition', 0.01)">&#9654;</button>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+Step 2:Add any comments for adjustments that you couldn’t achieve using the editor. I will contact you via email if I have any questions or need clarification.
+  <!-- Desktop Buttons -->
+  <div class="comment-and-buttons">
+    <div class="comment-box">
+      <label for="userComment">Add a Comment:</label><br />
+      <textarea id="userComment" rows="4" cols="50" placeholder="Type your comment here..."></textarea>
+    </div>
+    
+    <div class="button-container">
+      <button class="action-button" onclick="clearCanvas()">Clear Canvas</button>
+      <button class="action-button" onclick="resetToDefault()">Reset to Default Shape</button>
+      <button class="action-button" onclick="saveAsPNG()">Save Design</button>
+    </div>
+  </div>
+</div>
+
+<!-- Mobile Layout -->
+<div class="mobile-layout">
+  <div class="mobile-container">
+    <div class="mobile-canvas-container">
+      <canvas id="mobileBoardCanvas"></canvas>
+    </div>
+
+    <div class="mobile-controls">
+      <div class="tab-container">
+        <button class="tab-button active" onclick="showTab('body')">Body</button>
+        <button class="tab-button" onclick="showTab('nose')">Nose</button>
+        <button class="tab-button" onclick="showTab('tail')">Tail</button>
+      </div>
+
+      <div class="control-panels">
+        <!-- Body Controls Panel -->
+        <div id="bodyPanel" class="control-panel active">
+          <div class="mobile-slider-group">
+            <label>
+              Front Truck Width: <span class="value">08.50</span>
+              <span 
+                class="info-icon"
+                tabindex="0"
+                data-tooltip="Adjusts how wide the board is near the front truck."
+              ></span>
+            </label>
+            <input type="range" class="mobile-slider" value="8.5" min="1" max="10" step="0.125" 
+                   oninput="updateMobileShape('bodyWidthNose', this.value)" />
+          </div>
+
+          <div class="mobile-slider-group">
+            <label>
+              Back Truck Width: <span class="value">08.50</span>
+              <span 
+                class="info-icon"
+                tabindex="0"
+                data-tooltip="Adjusts how wide the board is near the back truck."
+              ></span>
+            </label>
+            <input type="range" class="mobile-slider" value="8.5" min="1" max="10" step="0.125" 
+                   oninput="updateMobileShape('bodyWidthTail', this.value)" />
+          </div>
+
+          <div class="mobile-slider-group">
+            <label>
+              Curve: <span class="value">45</span>
+              <span
+                class="info-icon"
+                tabindex="0"
+                data-tooltip="The curve of the body to make it more egg shaped, or hourglass shaped."
+              ></span>
+            </label>
+            <input type="range" class="mobile-slider" value="45" min="-50" max="50" step="1" 
+                   oninput="updateMobileShape('bodyCurvature', this.value)" />
+          </div>
+
+          <div class="mobile-slider-group">
+            <label>
+              Curve Peak: <span class="value">0.50</span>
+              <span
+                class="info-icon"
+                tabindex="0"
+                data-tooltip="Adjust where the peak of the curve is."
+              ></span>
+            </label>
+            <input type="range" class="mobile-slider" value="0.5" min="0" max="1" step="0.01" 
+                   oninput="updateMobileShape('bodyControlPoint', this.value)" />
+          </div>
+        </div>
+
+        <!-- Nose Controls Panel -->
+        <div id="nosePanel" class="control-panel">
+          <div class="mobile-slider-group">
+            <label>
+              Length: <span class="value">5.50</span>
+              <span
+                class="info-icon"
+                tabindex="0"
+                data-tooltip="Lenght of the nose from the body."
+              ></span>
+            </label>
+            <input type="range" class="mobile-slider" value="5.5" min="3" max="6" step="0.125" 
+                   oninput="updateMobileShape('noseLength', this.value)" />
+          </div>
+
+          <div class="mobile-slider-group">
+            <label>
+              Width: <span class="value">0.00</span>
+              <span
+                class="info-icon"
+                tabindex="0"
+                data-tooltip="Width of the very end of the nose, for a more flat nose"
+              ></span>
+            </label>
+            <input type="range" class="mobile-slider" value="0" min="0" max="10" step="0.125" 
+                   oninput="updateMobileShape('noseWidth', this.value)" />
+          </div>
+
+          <div class="mobile-slider-group">
+            <label>
+              Curve: <span class="value">40</span>
+              <span
+                class="info-icon"
+                tabindex="0"
+                data-tooltip="The curve and roundness ofthe nose."
+              ></span>
+            </label>
+            <input type="range" class="mobile-slider" value="40" min="0" max="50" step="1" 
+                   oninput="updateMobileShape('noseCurvature', this.value)" />
+          </div>
+
+          <div class="mobile-slider-group">
+            <label>
+              Curve Peak: <span class="value">0.96</span>
+              <span
+                class="info-icon"
+                tabindex="0"
+                data-tooltip="The peak of the curve to shape the nose how you want."
+              ></span>
+            </label>
+            <input type="range" class="mobile-slider" value="0.96" min="0" max="1" step="0.01" 
+                   oninput="updateMobileShape('noseControlPoint', this.value)" />
+          </div>
+        </div>
+
+        <!-- Tail Controls Panel -->
+        <div id="tailPanel" class="control-panel">
+          <div class="mobile-slider-group">
+            <label>
+              Length: <span class="value">5.50</span>
+              <span
+                class="info-icon"
+                tabindex="0"
+                data-tooltip="Lenght of the tail from th body."
+              ></span>
+            </label>
+            <input type="range" class="mobile-slider" value="5.5" min="3" max="6" step="0.125" 
+                   oninput="updateMobileShape('tailLength', this.value)" />
+          </div>
+
+          <div class="mobile-slider-group">
+            <label>
+              Width: <span class="value">0.00</span>
+              <span
+                class="info-icon"
+                tabindex="0"
+                data-tooltip="Width of the tail, to make a flatter or rounder tail."
+              ></span>
+            </label>
+            <input type="range" class="mobile-slider" value="0" min="0" max="10" step="0.125" 
+                   oninput="updateMobileShape('tailWidth', this.value)" />
+          </div>
+
+          <div class="mobile-slider-group">
+            <label>
+              Curve: <span class="value">40</span>
+              <span
+                class="info-icon"
+                tabindex="0"
+                data-tooltip="The curve and roundness ofthe tail"
+              ></span>
+            </label>
+            <input type="range" class="mobile-slider" value="40" min="0" max="50" step="1" 
+                   oninput="updateMobileShape('tailCurvature', this.value)" />
+          </div>
+
+          <div class="mobile-slider-group">
+            <label>
+              Curve Peak: <span class="value">0.96</span>
+              <span
+                class="info-icon"
+                tabindex="0"
+                data-tooltip="The peak of the curve to shape the tail how you want"
+              ></span>
+            </label>
+            <input type="range" class="mobile-slider" value="0.96" min="0" max="1" step="0.01" 
+                   oninput="updateMobileShape('tailControlPoint', this.value)" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mobile-length-display">
+      <strong>Total Board Length: <span id="mobileTotalLengthValue">22.00</span> inches</strong>
+    </div>
+
+    <!-- Mobile Buttons -->
+    <div class="mobile-buttons">
+      <button class="mobile-action-button" onclick="clearMobileCanvas()">Clear</button>
+      <button class="mobile-action-button" onclick="resetMobileToDefault()">Reset</button>
+      <button class="mobile-action-button" onclick="saveMobilePNG()">Save</button>
+    </div>
+
+    <div class="mobile-comment-box">
+      <label for="mobileComment">Add a Comment:</label>
+      <textarea id="mobileComment" rows="3" placeholder="Type your comment here..."></textarea>
+    </div>
+  </div>
+</div>
+
+<style>
+/* ==============================
+   ALL YOUR CSS IN ONE BLOCK
+   (IDENTICAL TO PREVIOUS VERSIONS)
+   ============================== */
+
+#resizableContainer {
+  width: 100%;
+  max-width: 100vw;
+  margin: 0 auto;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+#canvasContainer {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+canvas {
+  width: 100%;
+  height: auto;
+}
+
+#slidersContainer {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 10px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+}
+
+.slider-column {
+  width: 32%;
+  min-width: 250px;
+}
+
+.slider-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+fieldset {
+  border: 1px solid #ccc;
+  padding: 10px;
+  width: 100%;
+}
+
+label {
+  font-size: 1.2rem;
+}
+
+input[type="range"] {
+  width: 60%;
+}
+
+.styled-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 60%;
+  height: 8px;
+  background: #444;
+  outline: none;
+  opacity: 0.7;
+  transition: opacity .2s;
+}
+
+.styled-slider:hover {
+  opacity: 1;
+}
+
+.styled-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: #D32F2F;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.styled-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: #D32F2F;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.arrow-button {
+  width: 25px;
+  height: 25px;
+  font-size: 16px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 2px;
+}
+
+.action-button {
+  padding: 10px 20px;
+  background-color: #D32F2F;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.action-button:hover {
+  background-color: #B71C1C;
+}
+
+.comment-and-buttons {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.comment-box {
+  margin-right: 20px;
+}
+
+/* Mobile layout hidden on desktop */
+.mobile-layout {
+  display: none;
+  padding: 10px;
+}
+
+/* Mobile container */
+.mobile-container {
+  width: 100%;
+  max-width: 100vw;
+}
+
+.mobile-canvas-container {
+  width: 100%;
+  margin-bottom: 15px;
+  background: #f0f0f0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.tab-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  background: #f5f5f5;
+  border-radius: 8px;
+  padding: 5px;
+}
+
+.tab-button {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  background: none;
+  font-size: 16px;
+  color: #666;
+  border-radius: 6px;
+}
+
+.tab-button.active {
+  background: #D32F2F;
+  color: white;
+}
+
+.control-panel {
+  display: none;
+  padding: 15px;
+  background: #f5f5f5;
+  border-radius: 8px;
+}
+
+.control-panel.active {
+  display: block;
+}
+
+.mobile-slider-group {
+  margin-bottom: 12px;
+}
+
+.mobile-slider-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: #333;
+  font-size: 14px;
+}
+
+.mobile-slider {
+  width: 100%;
+  height: 30px;
+  -webkit-appearance: none;
+  background: #ddd;
+  border-radius: 15px;
+  outline: none;
+  padding: 0 10px;
+  margin: 8px 0;
+}
+
+.mobile-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 24px;
+  height: 24px;
+  background: #D32F2F;
+  border-radius: 50%;
+  cursor: pointer;
+  margin-top: -8px;
+}
+
+.mobile-buttons {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  gap: 10px;
+}
+
+.mobile-action-button {
+  flex: 1;
+  padding: 12px 0;
+  background: #D32F2F;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.mobile-comment-box {
+  margin-top: 15px;
+  padding: 10px;
+  background: #f5f5f5;
+  border-radius: 8px;
+}
+
+.mobile-comment-box label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #333;
+}
+
+.mobile-comment-box textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: vertical;
+  font-size: 16px;
+  min-height: 60px;
+}
+
+/* Show desktop layout only on >=769px */
+@media screen and (min-width: 769px) {
+  .desktop-layout { display: block; }
+  .mobile-layout { display: none; }
+}
+
+/* Show mobile layout only on <=768px */
+@media screen and (max-width: 768px) {
+  .desktop-layout { display: none; }
+  .mobile-layout { display: block; }
+}
+
+/* Tooltip icon styles */
+.info-icon {
+  display: inline-block;
+  margin-left: 0.3rem;
+  color: #fff;
+  background-color: #333;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  font-size: 12px;
+  line-height: 16px;
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+}
+
+.info-icon::before {
+  content: "i";
+  font-weight: bold;
+}
+
+.info-icon[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 110%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.8);
+  color: #fff;
+  padding: 6px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  z-index: 9999;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  min-width: 250px !important;  /* ensures at least 250px wide */
+  max-width: 400px !important;  /* can adjust to your liking */
+}
+
+.info-icon[data-tooltip]:hover::after,
+.info-icon[data-tooltip]:focus::after {
+  opacity: 1;
+  visibility: visible;
+}
+</style>
+
+<script>
+/* ==============================
+   ALL YOUR JAVASCRIPT IN ONE BLOCK
+   (IDENTICAL TO PREVIOUS VERSIONS)
+   ============================== */
+
+var canvas, mobileCanvas;
+var body, nose, tail;
+var centerX, centerY;
+var bodyLength;
+var noseArea, tailArea;
+var pixelsPerInch = 30;
+
+window.onload = function() {
+  if (window.innerWidth <= 768) {
+    // Mobile init
+    mobileCanvas = new fabric.Canvas('mobileBoardCanvas');
+    mobileCanvas.setBackgroundColor('#f0f0f0', mobileCanvas.renderAll.bind(mobileCanvas));
+    adjustMobileCanvasSize();
+    
+    centerX = mobileCanvas.getWidth() / 2;
+    centerY = mobileCanvas.getHeight() / 2;
+    
+    drawDefaultLinesAndZones(mobileCanvas);
+    drawMobileShape();
+    
+    preventScrollOnSliders();
+  } else {
+    // Desktop init
+    canvas = new fabric.Canvas('boardCanvas');
+    adjustCanvasSize();
+    canvas.setBackgroundColor('#f0f0f0', canvas.renderAll.bind(canvas));
+    
+    centerX = canvas.getWidth() / 2;
+    centerY = canvas.getHeight() / 2;
+    
+    drawDefaultLinesAndZones(canvas);
+    updateBoardShape();
+    
+    preventScrollOnSliders();
+  }
+
+};
+
+function drawDefaultLinesAndZones(targetCanvas) {
+  // Green center lines
+  var verticalLine = new fabric.Line([centerX, 0, centerX, targetCanvas.getHeight()], {
+    stroke: 'green',
+    strokeWidth: 1,
+    selectable: false,
+    opacity: 0.5
+  });
+
+  var horizontalLine = new fabric.Line([0, centerY, targetCanvas.getWidth(), centerY], {
+    stroke: 'green',
+    strokeWidth: 1,
+    selectable: false,
+    opacity: 0.5
+  });
+
+  targetCanvas.add(verticalLine);
+  targetCanvas.add(horizontalLine);
+
+  // Nose and tail areas
+  noseArea = new fabric.Rect({
+    left: 0,
+    top: 0,
+    width: inchesToPixels(6),
+    height: targetCanvas.getHeight(),
+    fill: 'rgba(255, 0, 0, 0.2)',
+    selectable: false
+  });
+  targetCanvas.add(noseArea);
+
+  tailArea = new fabric.Rect({
+    left: targetCanvas.getWidth() - inchesToPixels(6),
+    top: 0,
+    width: inchesToPixels(6),
+    height: targetCanvas.getHeight(),
+    fill: 'rgba(0, 0, 255, 0.2)',
+    selectable: false
+  });
+  targetCanvas.add(tailArea);
+  targetCanvas.renderAll();
+}
+
+function adjustCanvasSize() {
+  var availableWidth = window.innerWidth - 40;
+  pixelsPerInch = availableWidth / 34;
+  var canvasWidth = pixelsPerInch * 34;
+  var canvasHeight = pixelsPerInch * 10;
+
+  canvas.setWidth(canvasWidth);
+  canvas.setHeight(canvasHeight);
+
+  centerX = canvasWidth / 2;
+  centerY = canvasHeight / 2;
+}
+
+function adjustMobileCanvasSize() {
+  const containerWidth = window.innerWidth - 30;
+  pixelsPerInch = containerWidth / 34;
+  const canvasHeight = pixelsPerInch * 10;
+
+  mobileCanvas.setWidth(containerWidth);
+  mobileCanvas.setHeight(canvasHeight);
+  
+  centerX = containerWidth / 2;
+  centerY = canvasHeight / 2;
+}
+
+function preventScrollOnSliders() {
+  const sliders = document.querySelectorAll("input[type='range']");
+  sliders.forEach(slider => {
+    slider.addEventListener("touchstart", (e) => e.stopPropagation(), { passive: true });
+    slider.addEventListener("touchmove", (e) => e.stopPropagation(), { passive: true });
+  });
+}
+
+function formatTwoDecimalPlaces(value) {
+  return value.toFixed(2).padStart(5, '0');
+}
+
+function inchesToPixels(inches) {
+  return inches * pixelsPerInch;
+}
+
+// Desktop shape updating
+function updateBoardShape() {
+  if (body) canvas.remove(body);
+  if (nose) canvas.remove(nose);
+  if (tail) canvas.remove(tail);
+
+  var widthNose = parseFloat(document.getElementById('bodyWidthNose').value);
+  var widthTail = parseFloat(document.getElementById('bodyWidthTail').value);
+  var noseLength = parseFloat(document.getElementById('noseLength').value);
+  var tailLength = parseFloat(document.getElementById('tailLength').value);
+  var noseWidth = parseFloat(document.getElementById('noseWidth').value);
+  var noseCurvature = parseFloat(document.getElementById('noseCurvature').value);
+  var noseControlPointPosition = parseFloat(document.getElementById('noseControlPointPosition').value);
+  var tailWidth = parseFloat(document.getElementById('tailWidth').value);
+  var tailCurvature = parseFloat(document.getElementById('tailCurvature').value);
+  var tailControlPointPosition = parseFloat(document.getElementById('tailControlPointPosition').value);
+  var bodyCurvature = parseFloat(document.getElementById('bodyCurvature').value);
+  var bodyControlPointPosition = parseFloat(document.getElementById('bodyControlPointPosition').value);
+
+  // Update displays
+  document.getElementById('widthNoseValue').innerText = formatTwoDecimalPlaces(widthNose);
+  document.getElementById('widthTailValue').innerText = formatTwoDecimalPlaces(widthTail);
+  document.getElementById('noseLengthValue').innerText = formatTwoDecimalPlaces(noseLength);
+  document.getElementById('tailLengthValue').innerText = formatTwoDecimalPlaces(tailLength);
+  document.getElementById('noseWidthValue').innerText = formatTwoDecimalPlaces(noseWidth);
+  document.getElementById('tailWidthValue').innerText = formatTwoDecimalPlaces(tailWidth);
+  document.getElementById('noseCurvatureValue').innerText = noseCurvature;
+  document.getElementById('tailCurvatureValue').innerText = tailCurvature;
+  document.getElementById('bodyCurvatureValue').innerText = bodyCurvature;
+  document.getElementById('bodyControlPointPositionValue').innerText = formatTwoDecimalPlaces(bodyControlPointPosition);
+  document.getElementById('noseControlPointPositionValue').innerText = formatTwoDecimalPlaces(noseControlPointPosition);
+  document.getElementById('tailControlPointPositionValue').innerText = formatTwoDecimalPlaces(tailControlPointPosition);
+
+  var totalBoardLength = noseLength + tailLength + 22;
+  document.getElementById('totalBoardLengthValue').innerText = formatTwoDecimalPlaces(totalBoardLength);
+
+  bodyLength = (canvas.getWidth() - inchesToPixels(12));
+
+  // Control points
+  var noseControlPointX = inchesToPixels(6) - inchesToPixels(noseLength * noseControlPointPosition);
+  var tailControlPointX = canvas.getWidth() - inchesToPixels(6) + inchesToPixels(tailLength * tailControlPointPosition);
+  var bodyControlPointX = centerX - (bodyLength / 2) + bodyControlPointPosition * bodyLength;
+
+  var maxCurveY = canvas.getHeight() / 2;
+
+  var noseTopControlPointY = centerY - (noseCurvature / 50) * maxCurveY;
+  var noseBottomControlPointY = centerY + (noseCurvature / 50) * maxCurveY;
+
+  var tailTopControlPointY = centerY - (tailCurvature / 50) * maxCurveY;
+  var tailBottomControlPointY = centerY + (tailCurvature / 50) * maxCurveY;
+
+  var bodyTopControlPointY = centerY - (bodyCurvature / 50) * maxCurveY;
+  var bodyBottomControlPointY = centerY + (bodyCurvature / 50) * maxCurveY;
+
+  // Create shapes
+  nose = new fabric.Path(`M ${inchesToPixels(6)} ${centerY - inchesToPixels(widthNose / 2)} 
+                         Q ${noseControlPointX} ${noseTopControlPointY}, 
+                         ${inchesToPixels(6) - inchesToPixels(noseLength)} ${centerY - inchesToPixels(noseWidth / 2)}
+                         L ${inchesToPixels(6) - inchesToPixels(noseLength)} ${centerY + inchesToPixels(noseWidth / 2)}
+                         Q ${noseControlPointX} ${noseBottomControlPointY}, 
+                         ${inchesToPixels(6)} ${centerY + inchesToPixels(widthNose / 2)}`, {
+    fill: 'transparent',
+    stroke: 'black',
+    originX: 'left',
+    originY: 'center'
+  });
+
+  body = new fabric.Path(`M ${inchesToPixels(6)} ${centerY - inchesToPixels(widthNose / 2)} 
+                         Q ${bodyControlPointX} ${bodyTopControlPointY}, 
+                         ${canvas.getWidth() - inchesToPixels(6)} ${centerY - inchesToPixels(widthTail / 2)}
+                         L ${canvas.getWidth() - inchesToPixels(6)} ${centerY + inchesToPixels(widthTail / 2)}
+                         Q ${bodyControlPointX} ${bodyBottomControlPointY}, 
+                         ${inchesToPixels(6)} ${centerY + inchesToPixels(widthNose / 2)}`, {
+    fill: 'transparent',
+    stroke: 'black',
+    originX: 'left',
+    originY: 'center'
+  });
+
+  tail = new fabric.Path(`M ${canvas.getWidth() - inchesToPixels(6)} ${centerY - inchesToPixels(widthTail / 2)} 
+                         Q ${tailControlPointX} ${tailTopControlPointY}, 
+                         ${canvas.getWidth() - inchesToPixels(6) + inchesToPixels(tailLength)} ${centerY - inchesToPixels(tailWidth / 2)}
+                         L ${canvas.getWidth() - inchesToPixels(6) + inchesToPixels(tailLength)} ${centerY + inchesToPixels(tailWidth / 2)}
+                         Q ${tailControlPointX} ${tailBottomControlPointY}, 
+                         ${canvas.getWidth() - inchesToPixels(6)} ${centerY + inchesToPixels(widthTail / 2)}`, {
+    fill: 'transparent',
+    stroke: 'black',
+    originX: 'left',
+    originY: 'center'
+  });
+
+  canvas.add(body);
+  canvas.add(nose);
+  canvas.add(tail);
+  canvas.renderAll();
+}
+
+// Mobile shape updating
+function updateMobileShape(property, value) {
+  // Update display
+  const container = event.target.closest('.mobile-slider-group');
+  if (container) {
+    container.querySelector('.value').textContent = formatTwoDecimalPlaces(parseFloat(value));
+  }
+
+  // Re-draw
+  const values = getMobileValues();
+  const totalLength = values.noseLength + values.tailLength + 22;
+  document.getElementById('mobileTotalLengthValue').textContent = formatTwoDecimalPlaces(totalLength);
+  
+  drawMobileShape();
+}
+
+function drawMobileShape() {
+  if (body) mobileCanvas.remove(body);
+  if (nose) mobileCanvas.remove(nose);
+  if (tail) mobileCanvas.remove(tail);
+
+  const values = getMobileValues();
+  
+  // Same logic as desktop
+  const width = mobileCanvas.getWidth();
+  const height = mobileCanvas.getHeight();
+  bodyLength = (width - inchesToPixels(12));
+  
+  const noseControlPointX = inchesToPixels(6) - inchesToPixels(values.noseLength * values.noseControlPoint);
+  const tailControlPointX = width - inchesToPixels(6) + inchesToPixels(values.tailLength * values.tailControlPoint);
+  const bodyControlPointX = centerX - (bodyLength / 2) + values.bodyControlPoint * bodyLength;
+
+  const maxCurveY = height / 2;
+  const noseTopControlPointY = centerY - (values.noseCurvature / 50) * maxCurveY;
+  const noseBottomControlPointY = centerY + (values.noseCurvature / 50) * maxCurveY;
+  const tailTopControlPointY = centerY - (values.tailCurvature / 50) * maxCurveY;
+  const tailBottomControlPointY = centerY + (values.tailCurvature / 50) * maxCurveY;
+  const bodyTopControlPointY = centerY - (values.bodyCurvature / 50) * maxCurveY;
+  const bodyBottomControlPointY = centerY + (values.bodyCurvature / 50) * maxCurveY;
+
+  nose = new fabric.Path(`M ${inchesToPixels(6)} ${centerY - inchesToPixels(values.bodyWidthNose / 2)} 
+                         Q ${noseControlPointX} ${noseTopControlPointY}, 
+                         ${inchesToPixels(6) - inchesToPixels(values.noseLength)} ${centerY - inchesToPixels(values.noseWidth / 2)}
+                         L ${inchesToPixels(6) - inchesToPixels(values.noseLength)} ${centerY + inchesToPixels(values.noseWidth / 2)}
+                         Q ${noseControlPointX} ${noseBottomControlPointY}, 
+                         ${inchesToPixels(6)} ${centerY + inchesToPixels(values.bodyWidthNose / 2)}`, {
+    fill: 'transparent',
+    stroke: 'black',
+    originX: 'left',
+    originY: 'center'
+  });
+
+  body = new fabric.Path(`M ${inchesToPixels(6)} ${centerY - inchesToPixels(values.bodyWidthNose / 2)} 
+                         Q ${bodyControlPointX} ${bodyTopControlPointY}, 
+                         ${width - inchesToPixels(6)} ${centerY - inchesToPixels(values.bodyWidthTail / 2)}
+                         L ${width - inchesToPixels(6)} ${centerY + inchesToPixels(values.bodyWidthTail / 2)}
+                         Q ${bodyControlPointX} ${bodyBottomControlPointY}, 
+                         ${inchesToPixels(6)} ${centerY + inchesToPixels(values.bodyWidthNose / 2)}`, {
+    fill: 'transparent',
+    stroke: 'black',
+    originX: 'left',
+    originY: 'center'
+  });
+
+  tail = new fabric.Path(`M ${width - inchesToPixels(6)} ${centerY - inchesToPixels(values.bodyWidthTail / 2)} 
+                         Q ${tailControlPointX} ${tailTopControlPointY}, 
+                         ${width - inchesToPixels(6) + inchesToPixels(values.tailLength)} ${centerY - inchesToPixels(values.tailWidth / 2)}
+                         L ${width - inchesToPixels(6) + inchesToPixels(values.tailLength)} ${centerY + inchesToPixels(values.tailWidth / 2)}
+                         Q ${tailControlPointX} ${tailBottomControlPointY}, 
+                         ${width - inchesToPixels(6)} ${centerY + inchesToPixels(values.bodyWidthTail / 2)}`, {
+    fill: 'transparent',
+    stroke: 'black',
+    originX: 'left',
+    originY: 'center'
+  });
+
+  mobileCanvas.add(body);
+  mobileCanvas.add(nose);
+  mobileCanvas.add(tail);
+  mobileCanvas.renderAll();
+}
+
+function getMobileValues() {
+  const getSliderValue = (panelId, className) => {
+    const panel = document.getElementById(panelId);
+    const slider = panel.querySelector(`.mobile-slider[oninput*="${className}"]`);
+    return slider ? parseFloat(slider.value) : 0;
+  };
+
+  return {
+    bodyWidthNose: getSliderValue('bodyPanel', 'bodyWidthNose'),
+    bodyWidthTail: getSliderValue('bodyPanel', 'bodyWidthTail'),
+    bodyCurvature: getSliderValue('bodyPanel', 'bodyCurvature'),
+    bodyControlPoint: getSliderValue('bodyPanel', 'bodyControlPoint'),
+    noseLength: getSliderValue('nosePanel', 'noseLength'),
+    noseWidth: getSliderValue('nosePanel', 'noseWidth'),
+    noseCurvature: getSliderValue('nosePanel', 'noseCurvature'),
+    noseControlPoint: getSliderValue('nosePanel', 'noseControlPoint'),
+    tailLength: getSliderValue('tailPanel', 'tailLength'),
+    tailWidth: getSliderValue('tailPanel', 'tailWidth'),
+    tailCurvature: getSliderValue('tailPanel', 'tailCurvature'),
+    tailControlPoint: getSliderValue('tailPanel', 'tailControlPoint')
+  };
+}
+
+// Mobile Controls
+function showTab(tabName) {
+  document.querySelectorAll('.control-panel').forEach(panel => {
+    panel.classList.remove('active');
+  });
+  document.querySelectorAll('.tab-button').forEach(button => {
+    button.classList.remove('active');
+  });
+  document.getElementById(tabName + 'Panel').classList.add('active');
+  event.target.classList.add('active');
+}
+
+function clearMobileCanvas() {
+  if (body) mobileCanvas.remove(body);
+  if (nose) mobileCanvas.remove(nose);
+  if (tail) mobileCanvas.remove(tail);
+  
+  mobileCanvas.setBackgroundColor('#f0f0f0', mobileCanvas.renderAll.bind(mobileCanvas));
+  drawDefaultLinesAndZones(mobileCanvas);
+}
+
+function resetMobileToDefault() {
+  const defaultValues = {
+    bodyWidthNose: 8.5,
+    bodyWidthTail: 8.5,
+    bodyCurvature: 45,
+    bodyControlPoint: 0.5,
+    noseLength: 5.5,
+    noseWidth: 0,
+    noseCurvature: 40,
+    noseControlPoint: 0.96,
+    tailLength: 5.5,
+    tailWidth: 0,
+    tailCurvature: 40,
+    tailControlPoint: 0.96
+  };
+
+  document.querySelectorAll('.mobile-slider').forEach(slider => {
+    const property = slider.getAttribute('oninput').match(/'([^']+)'/)[1];
+    if (defaultValues[property] !== undefined) {
+      slider.value = defaultValues[property];
+      const container = slider.closest('.mobile-slider-group');
+      if (container) {
+        container.querySelector('.value').textContent = formatTwoDecimalPlaces(defaultValues[property]);
+      }
+    }
+  });
+
+  drawMobileShape();
+}
+
+// Desktop Controls
+function clearCanvas() {
+  if (body) canvas.remove(body);
+  if (nose) canvas.remove(nose);
+  if (tail) canvas.remove(tail);
+  
+  canvas.setBackgroundColor('#f0f0f0', canvas.renderAll.bind(canvas));
+  drawDefaultLinesAndZones(canvas);
+}
+
+function resetToDefault() {
+  document.getElementById('bodyWidthNose').value = 8.5;
+  document.getElementById('bodyWidthTail').value = 8.5;
+  document.getElementById('bodyCurvature').value = 45;
+  document.getElementById('bodyControlPointPosition').value = 0.5;
+  document.getElementById('noseLength').value = 5.5;
+  document.getElementById('noseWidth').value = 0;
+  document.getElementById('noseCurvature').value = 40;
+  document.getElementById('noseControlPointPosition').value = 0.96;
+  document.getElementById('tailLength').value = 5.5;
+  document.getElementById('tailWidth').value = 0;
+  document.getElementById('tailCurvature').value = 40;
+  document.getElementById('tailControlPointPosition').value = 0.96;
+
+  updateBoardShape();
+}
+
+function incrementSlider(sliderId, value) {
+  var slider = document.getElementById(sliderId);
+  slider.value = parseFloat(slider.value) + value;
+  slider.dispatchEvent(new Event('input'));
+}
+
+function saveMobilePNG() {
+  var filename = prompt("Enter a name for your file:", "custom-skateboard");
+  if (!filename) return;
+
+  if (!filename.endsWith(".png")) {
+    filename += ".png";
+  }
+
+  var comment = document.getElementById('mobileComment').value;
+  if (comment) {
+    var commentText = new fabric.Textbox("Comment: " + comment, {
+      left: 20,
+      top: mobileCanvas.getHeight() + 20,
+      fontSize: 12,
+      fill: 'black',
+      width: mobileCanvas.getWidth() / 2,
+      textAlign: 'left',
+      splitByGrapheme: true
+    });
+    mobileCanvas.add(commentText);
+    mobileCanvas.setHeight(mobileCanvas.getHeight() + 50);
+    mobileCanvas.renderAll();
+  }
+
+  var dataURL = mobileCanvas.toDataURL({
+    format: 'png',
+    multiplier: 15
+  });
+
+  if (comment) {
+    mobileCanvas.remove(commentText);
+    mobileCanvas.setHeight(mobileCanvas.getHeight() - 50);
+    mobileCanvas.renderAll();
+  }
+
+  var link = document.createElement('a');
+  link.href = dataURL;
+  link.download = filename;
+  link.click();
+}
+
+function getMeasurementsText(values) {
+  return [
+    {
+      text: `Body:
+Front Truck Width: ${values.bodyWidthNose}"
+Back Truck Width: ${values.bodyWidthTail}"
+Curve: ${values.bodyCurvature}
+Curve Peak: ${values.bodyControlPoint}`,
+      left: 20
+    },
+    {
+      text: `Nose:
+Length: ${values.noseLength}"
+Width: ${values.noseWidth}"
+Curve: ${values.noseCurvature}
+Curve Peak: ${values.noseControlPoint}`,
+      left: 140
+    },
+    {
+      text: `Tail:
+Length: ${values.tailLength}"
+Width: ${values.tailWidth}"
+Curve: ${values.tailCurvature}
+Curve Peak: ${values.tailControlPoint}
+
+Total Length: ${values.noseLength + values.tailLength + 22}"`,
+      left: 260
+    }
+  ];
+}
+
+function saveAsPNG() {
+  var filename = prompt("Enter a name for your file:", "custom-skateboard");
+  if (!filename) return;
+
+  if (!filename.endsWith(".png")) {
+    filename += ".png";
+  }
+
+  // Gather current values
+  const values = {
+    bodyWidthNose: parseFloat(document.getElementById('bodyWidthNose').value),
+    bodyWidthTail: parseFloat(document.getElementById('bodyWidthTail').value),
+    bodyCurvature: parseFloat(document.getElementById('bodyCurvature').value),
+    bodyControlPoint: parseFloat(document.getElementById('bodyControlPointPosition').value),
+    noseLength: parseFloat(document.getElementById('noseLength').value),
+    noseWidth: parseFloat(document.getElementById('noseWidth').value),
+    noseCurvature: parseFloat(document.getElementById('noseCurvature').value),
+    noseControlPoint: parseFloat(document.getElementById('noseControlPointPosition').value),
+    tailLength: parseFloat(document.getElementById('tailLength').value),
+    tailWidth: parseFloat(document.getElementById('tailWidth').value),
+    tailCurvature: parseFloat(document.getElementById('tailCurvature').value),
+    tailControlPoint: parseFloat(document.getElementById('tailControlPointPosition').value)
+  };
+
+  const comment = document.getElementById('userComment').value;
+  const originalHeight = canvas.getHeight();
+  
+  // Add extra space for text
+  canvas.setHeight(canvas.getHeight() + 100);
+  
+  // Add measurements text in columns
+  const measurements = getMeasurementsText(values);
+  measurements.forEach(column => {
+    const measurementText = new fabric.Textbox(column.text, {
+      left: column.left,
+      top: originalHeight + 20,
+      fontSize: 8,
+      width: 120,
+      fill: 'black',
+      textAlign: 'left'
+    });
+    canvas.add(measurementText);
+  });
+  
+  // Add comment if exists
+  if (comment) {
+    const commentText = new fabric.Textbox("Comment: " + comment, {
+      left: canvas.getWidth() / 2 + 20,
+      top: originalHeight + 20,
+      fontSize: 12,
+      width: canvas.getWidth() / 2 - 40,
+      fill: 'black',
+      textAlign: 'left'
+    });
+    canvas.add(commentText);
+  }
+
+  canvas.renderAll();
+
+  const dataURL = canvas.toDataURL({
+    format: 'png',
+    multiplier: 3
+  });
+
+  // Cleanup
+  canvas.getObjects().forEach(obj => {
+    if (obj instanceof fabric.Textbox) {
+      canvas.remove(obj);
+    }
+  });
+  canvas.setHeight(originalHeight);
+  canvas.renderAll();
+
+  const link = document.createElement('a');
+  link.href = dataURL;
+  link.download = filename;
+  link.click();
+}
+
+function saveMobilePNG() {
+  var filename = prompt("Enter a name for your file:", "custom-skateboard");
+  if (!filename) return;
+
+  if (!filename.endsWith(".png")) {
+    filename += ".png";
+  }
+
+  const values = getMobileValues();
+  const comment = document.getElementById('mobileComment').value;
+  const originalHeight = mobileCanvas.getHeight();
+  
+  // Add space for text
+  mobileCanvas.setHeight(mobileCanvas.getHeight() + 100);
+  
+  // Add measurements text
+  const measurements = getMeasurementsText(values);
+  measurements.forEach(column => {
+    const measurementText = new fabric.Textbox(column.text, {
+      left: column.left,
+      top: originalHeight + 20,
+      fontSize: 8,
+      width: 120,
+      fill: 'black',
+      textAlign: 'left'
+    });
+    mobileCanvas.add(measurementText);
+  });
+  
+  // Add comment if exists
+  if (comment) {
+    const commentText = new fabric.Textbox("Comment: " + comment, {
+      left: mobileCanvas.getWidth() / 2 + 20,
+      top: originalHeight + 20,
+      fontSize: 12,
+      width: mobileCanvas.getWidth() / 2 - 40,
+      fill: 'black',
+      textAlign: 'left'
+    });
+    mobileCanvas.add(commentText);
+  }
+
+  mobileCanvas.renderAll();
+
+  const dataURL = mobileCanvas.toDataURL({
+    format: 'png',
+    multiplier: 3
+  });
+
+  // Cleanup
+  mobileCanvas.getObjects().forEach(obj => {
+    if (obj instanceof fabric.Textbox) {
+      mobileCanvas.remove(obj);
+    }
+  });
+  mobileCanvas.setHeight(originalHeight);
+  mobileCanvas.renderAll();
+
+  const link = document.createElement('a');
+  link.href = dataURL;
+  link.download = filename;
+  link.click();
+}
+</script>
+
+<!-- END SKATEBOARD CUSTOMIZER SINGLE-SNIPPET -->
+Step 3:Click ‘Save’ to download the PNG file to your device. You can use this file for future purchases, as a reference for your next design, or to share with friends!
+
+<br><br>*Sometimes saving on mobile causes the words to intersect, don't worry about it I can figure out what it says.
+<br>
+<br>Step 4:To purchase your custom-shaped board, scroll down, select your options, UPLOAD the file you saved from the editor above, by clicking on the white box that says "CLICK HERE TO UPLOAD CUSTOM BOARD SHAPE FILE", and add to cart!
