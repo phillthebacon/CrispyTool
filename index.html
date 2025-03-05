@@ -732,6 +732,25 @@ function saveAsPNG() {
   link.click();
 }
 
+document.addEventListener('DOMContentLoaded', function() {
+  const tabButtons = document.querySelectorAll('.tab-button');
+  const panels = document.querySelectorAll('.panel');
+
+  tabButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      // Remove .active from all buttons
+      tabButtons.forEach(btn => btn.classList.remove('active'));
+      // Remove .active from all panels
+      panels.forEach(panel => panel.classList.remove('active'));
+
+      // Add .active to the clicked button
+      button.classList.add('active');
+      // Show the corresponding panel
+      const targetPanelID = button.getAttribute('data-tab');
+      document.getElementById(targetPanelID).classList.add('active');
+    });
+  });
+});
 
 /**
  * Prevents the page from scrolling on mobile devices when
