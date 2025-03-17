@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>3D Skateboard Shape Tool - Troubleshooting</title>
+  <title>3D Skateboard Tool (Module Version)</title>
   <style>
     body { margin: 0; overflow: hidden; font-family: sans-serif; }
     #gui {
@@ -27,7 +27,7 @@
 </head>
 <body>
   <div id="gui">
-    <!-- (Slider controls remain the same as before) -->
+    <!-- Example slider controls -->
     <label>
       Body Front Width (in): <span id="bodyWidthNoseVal">8.5</span>
       <input type="range" id="bodyWidthNose" min="1" max="10" step="0.125" value="8.5">
@@ -71,9 +71,10 @@
     <button id="updateButton">Update Shape</button>
   </div>
 
-  <!-- Three.js Library -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r112/three.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r112/controls/OrbitControls.js"></script>
+  <script type="module">
+    // Import Three.js and OrbitControls as modules
+    import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.module.js';
+    import { OrbitControls } from 'https://threejs.org/examples/jsm/controls/OrbitControls.js';
 
     let scene, camera, renderer, controls;
     let boardMesh;
@@ -82,50 +83,40 @@
     animate();
 
     function init() {
-      // Create scene with a visible background color
       scene = new THREE.Scene();
-      scene.background = new THREE.Color(0xf0f8ff); // light background
+      scene.background = new THREE.Color(0xf0f8ff);
 
-      // Set up camera
       const aspect = window.innerWidth / window.innerHeight;
       camera = new THREE.PerspectiveCamera(45, aspect, 0.1, 1000);
-      camera.position.set(20, 20, 40); // moved a bit for a better angle
+      camera.position.set(20, 20, 40);
 
-      // Set up renderer
       renderer = new THREE.WebGLRenderer({ antialias: true });
       renderer.setSize(window.innerWidth, window.innerHeight);
       document.body.appendChild(renderer.domElement);
 
-      // Lights
       scene.add(new THREE.AmbientLight(0x888888));
       const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
       directionalLight.position.set(0, 50, 50);
       scene.add(directionalLight);
 
-      // For debugging: add an AxesHelper
-      const axesHelper = new THREE.AxesHelper(10);
-      scene.add(axesHelper);
+      // Add an AxesHelper to visualize the scene orientation
+      scene.add(new THREE.AxesHelper(10));
 
-      // OrbitControls for interactive rotation
-      controls = new THREE.OrbitControls(camera, renderer.domElement);
+      // Use imported OrbitControls
+      controls = new OrbitControls(camera, renderer.domElement);
 
-      // Create initial board mesh and add to scene
       boardMesh = createBoardShape();
       scene.add(boardMesh);
 
       // Update slider labels on input
       document.querySelectorAll('#gui input').forEach(input => {
         input.addEventListener('input', (e) => {
-          const id = e.target.id;
-          const span = document.getElementById(id + 'Val');
+          const span = document.getElementById(e.target.id + 'Val');
           if (span) span.textContent = e.target.value;
         });
       });
 
-      // Update button event listener
       document.getElementById('updateButton').addEventListener('click', updateBoardShape);
-
-      // Handle window resize
       window.addEventListener('resize', onWindowResize, false);
     }
 
@@ -149,7 +140,6 @@
       scene.add(boardMesh);
     }
 
-    // Create the board shape with extrusion
     function createBoardShape() {
       // Read parameters (in inches)
       const bodyWidthNose = parseFloat(document.getElementById('bodyWidthNose').value);
@@ -163,39 +153,35 @@
       const bodyCtrlPos = parseFloat(document.getElementById('bodyCtrlPos').value);
       const tailCtrlPos = parseFloat(document.getElementById('tailCtrlPos').value);
 
-      // Fixed lengths (in inches)
-      const bodyLength = 22; // central body section length
-      const noseStart = 6;   // start point for the body section
+      // Define fixed lengths (in inches)
+      const bodyLength = 22;
+      const noseStart = 6;
       const tailStart = noseStart + bodyLength;
 
-      // Build a 2D shape (upper half)
+      // Build a 2D shape (upper half of the board)
       const shape = new THREE.Shape();
       shape.moveTo(noseStart - noseLength, 0);
-      // Nose curve
       const noseCPx = noseStart - noseLength * noseCtrlPos;
       const noseCPy = (bodyWidthNose / 2) - (noseCurvature / 50) * (bodyWidthNose);
       shape.quadraticCurveTo(noseCPx, noseCPy, noseStart, bodyWidthNose / 2);
 
-      // Body curve
       const bodyCPx = noseStart + bodyCtrlPos * bodyLength;
       const bodyCPy = ((bodyWidthNose / 2) + (bodyWidthTail / 2)) / 2 - (bodyCurvature / 50) * ((bodyWidthNose + bodyWidthTail) / 2);
       shape.quadraticCurveTo(bodyCPx, bodyCPy, tailStart, bodyWidthTail / 2);
 
-      // Tail curve
       const tailCPx = tailStart + tailLength * tailCtrlPos;
       const tailCPy = (bodyWidthTail / 2) - (tailCurvature / 50) * (bodyWidthTail);
       shape.quadraticCurveTo(tailCPx, tailCPy, tailStart + tailLength, 0);
 
-      // Lower half (mirroring)
+      // Mirror for lower half
       shape.lineTo(tailStart + tailLength, 0);
       shape.quadraticCurveTo(tailCPx, -tailCPy, tailStart, -bodyWidthTail / 2);
       shape.quadraticCurveTo(bodyCPx, -bodyCPy, noseStart, -bodyWidthNose / 2);
       shape.quadraticCurveTo(noseCPx, -noseCPy, noseStart - noseLength, 0);
 
-      // Extrude settings with increased depth for better visibility
       const extrudeSettings = {
         steps: 2,
-        depth: 2, // increased depth from 0.5 to 2
+        depth: 2,
         bevelEnabled: true,
         bevelThickness: 0.2,
         bevelSize: 0.2,
@@ -206,7 +192,6 @@
       const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
       geometry.center();
 
-      // Use DoubleSide to ensure both sides of the faces are rendered
       const material = new THREE.MeshPhongMaterial({ 
         color: 0x8B4513, 
         shininess: 50,
