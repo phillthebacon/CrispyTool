@@ -80,8 +80,9 @@
 
   <!-- Three.js and OrbitControls as ES Modules -->
   <script type="module">
-    import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.module.js';
-    import { OrbitControls } from 'https://threejs.org/examples/jsm/controls/OrbitControls.js';
+    // Updated imports using unpkg.com URLs
+    import * as THREE from 'https://unpkg.com/three@0.128.0/build/three.module.js';
+    import { OrbitControls } from 'https://unpkg.com/three@0.128.0/examples/jsm/controls/OrbitControls.js';
 
     let scene, camera, renderer, controls, boardMesh;
     
